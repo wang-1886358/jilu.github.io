@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日常记录管家 - 简约治愈风</title>
+    <style>
+        :root {
+            --bg-beige: #fdfbf7;
+            --bg-blue: #e3f2fd;
+            --primary-blue: #42a5f5;
+            --text-color: #5d5d5d;
+            --card-bg: #ffffff;
+            --accent-color: #90caf9;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-beige: #1a1a1a;
+            --bg-blue: #2c3e50;
+            --primary-blue: #64b5f6;
+            --text-color: #e0e0e0;
+            --card-bg: #2d2d2d;
+            --accent-color: #1976d2;
+        }
+
+        [data-theme="pink"] {
+            --bg-beige: #fff0f5;
+            --bg-blue: #ffe4e1;
+            --primary-blue: #ff69b4;
+            --text-color: #5d4037;
+            --card-bg: #ffffff;
+            --accent-color: #ffb6c1;
+        }
+
+        [data-theme="yellow"] {
+            --bg-beige: #fffacd;
+            --bg-blue: #fff9c4;
+            --primary-blue: #fbc02d;
+            --text-color: #4e342e;
+            --card-bg: #ffffff;
+            --accent-color: #fff176;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-beige);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        /* 顶部导航 */
+        header {
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav ul li {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: var(--transition);
+        }
+
+        nav ul li:hover, nav ul li.active {
+            background-color: var(--bg-blue);
+            color: var(--primary-blue);
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* 布局容器 */
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        /* 左侧功能快捷栏 */
+        aside {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quick-btn {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid transparent;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            background-color: var(--bg-blue);
+        }
+
+        /* 中间主内容区 */
+        main {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            min-height: 500px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 模块样式 */
+        h2 { margin-bottom: 1.5rem; color: var(--primary-blue); }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-blue);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-card h3 { font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem; }
+        .stat-card p { font-size: 1.2rem; font-weight: bold; }
+
+        /* 表单样式 */
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        input:focus { border-color: var(--primary-blue); }
+
+        .btn-group { display: flex; gap: 1rem; margin-top: 1rem; }
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .btn-primary { background: var(--primary-blue); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary { background: #eee; color: #666; }
+
+        /* 底部版权栏 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: auto;
+        }
+
+        /* 提示框 */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; padding: 1rem; }
+            aside { width: 100%; flex-direction: row; flex-wrap: wrap; }
+            .quick-btn { flex: 1; min-width: 120px; }
+            nav ul { display: none; }
+        }
+
+        /* 模块特定样式 */
+        .mood-options { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .mood-item {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .mood-item.active { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+
+        .list-container { margin-top: 2rem; }
+        .list-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .empty-tip { text-align: center; padding: 3rem; opacity: 0.5; }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        /* 日历样式 */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 1rem;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            background: var(--bg-blue);
+            cursor: pointer;
+            position: relative;
+        }
+        .calendar-day.other-month { opacity: 0.3; cursor: default; }
+        .calendar-day.has-record::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+        }
+        .calendar-day .mood-icon { font-size: 1rem; margin-top: 2px; }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* 计时器样式 */
+        #timer-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-align: center;
+            margin: 1.5rem 0;
+            font-family: monospace;
+        }
+
+        /* 闹钟动画 */
+        .alarm-clock {
+            font-size: 5rem;
+            display: block;
+            margin: 0 auto 1rem;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-15deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        /* 禁用样式 */
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">✨ 日常记录管家</div>
+        <nav>
+            <ul id="nav-links">
+                <li data-page="home" class="active">首页概览</li>
+                <li data-page="expense">开销记录</li>
+                <li data-page="mood">心情打卡</li>
+                <li data-page="study">学习记录</li>
+                <li data-page="diary">写日记</li>
+                <li data-page="profile">个人中心</li>
+            </ul>
+        </nav>
+        <div class="theme-toggle" id="theme-toggle" title="切换夜间模式">🌙</div>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="quick-btn" onclick="showPage('expense')">💰 记开销</div>
+            <div class="quick-btn" onclick="showPage('mood')">😊 打卡心情</div>
+            <div class="quick-btn" onclick="showPage('study')">📚 记学习</div>
+            <div class="quick-btn" onclick="showPage('diary')">✍️ 写日记</div>
+        </aside>
+
+        <main id="main-content">
+            <!-- 首页概览 -->
+            <section id="home" class="page active">
+                <h2 id="welcome-msg">你好，记录者，记录今日美好吧✨</h2>
+                <div class="card-grid">
+                    <div class="stat-card">
+                        <h3>今日支出</h3>
+                        <p id="today-expense">¥0.00</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>今日心情</h3>
+                        <p id="today-mood">未记录</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>学习时长</h3>
+                        <p id="today-study">0 分钟</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>日记状态</h3>
+                        <p id="today-diary">待撰写</p>
+                    </div>
+                </div>
+                <div id="home-empty" class="empty-tip">暂无今日记录，点击按钮快速开启</div>
+            </section>
+
+            <!-- 开销记录 -->
+            <section id="expense" class="page">
+                <h2>开销记录</h2>
+                <div class="stat-card" style="margin-bottom: 1.5rem; text-align: left;">
+                    <p id="monthly-summary">本月收支¥0.00，结余¥0.00；预算剩余¥2000.00</p>
+                </div>
+                <div class="form-group">
+                    <label>金额 (¥)</label>
+                    <input type="number" id="exp-amount" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>类型</label>
+                    <select id="exp-type">
+                        <option value="餐饮">餐饮</option>
+                        <option value="交通">交通</option>
+                        <option value="学习">学习</option>
+                        <option value="购物">购物</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <input type="text" id="exp-note" placeholder="写点什么...">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="saveExpense()">保存记录</button>
+                    <button class="btn-secondary" onclick="clearForm('expense')">清空</button>
+                </div>
+                <div class="list-container" id="expense-list">
+                    <!-- 列表由 JS 渲染 -->
+                </div>
+            </section>
+
+            <!-- 心情打卡 -->
+            <section id="mood" class="page">
+                <h2>心情打卡</h2>
+                <div class="mood-options" id="mood-selector">
+                    <div class="mood-item" data-mood="开心">😊 开心</div>
+                    <div class="mood-item" data-mood="平静">😐 平静</div>
+                    <div class="mood-item" data-mood="低落">😔 低落</div>
+                    <div class="mood-item" data-mood="疲惫">😫 疲惫</div>
+                </div>
+                <div class="form-group">
+                    <label>心情打分 (1-10)</label>
+                    <input type="range" id="mood-score" min="1" max="10" step="1">
+                    <div style="text-align: center;" id="score-display">5</div>
+                </div>
+                <div class="form-group">
+                    <label>心情随笔</label>
+                    <textarea id="mood-note" rows="3" placeholder="此刻在想什么？"></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" id="save-mood-btn" onclick="saveMood()">今日打卡</button>
+                    <button class="btn-secondary" onclick="openMoodCalendar()">查看心情日历</button>
+                </div>
+                <p style="margin-top: 1.5rem; font-style: italic; color: #888;">“坏情绪会走，美好常在”</p>
+            </section>
+
+            <!-- 学习记录 -->
+            <section id="study" class="page">
+                <h2>学习记录</h2>
+                <div class="stat-card" style="margin-bottom: 1.5rem; text-align: left;">
+                    <p id="study-summary">累计学习 0 小时，完成率 0%</p>
+                </div>
+                <div class="form-group">
+                    <label>学习内容</label>
+                    <input type="text" id="study-task" placeholder="例如：前端开发学习">
+                </div>
+                <div class="form-group">
+                    <label>时长 (分钟)</label>
+                    <input type="number" id="study-duration" placeholder="30">
+                </div>
+                <div class="form-group">
+                    <label>设置倒计时 (分钟，选填)</label>
+                    <input type="number" id="countdown-input" placeholder="输入分钟后自动提醒">
+                </div>
+                <div id="timer-display">00:00:00</div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="addStudyTask()">添加任务</button>
+                    <button class="btn-secondary" id="timer-btn" onclick="toggleTimer()">开始计时</button>
+                </div>
+                <div class="list-container" id="study-list"></div>
+                <p style="margin-top: 1.5rem; font-style: italic; color: #888;">“点滴努力，终有收获”</p>
+            </section>
+
+            <!-- 日记撰写 -->
+            <section id="diary" class="page">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>写日记</h2>
+                    <div id="diary-date-display" style="font-weight: bold; color: var(--primary-blue); cursor: pointer;" onclick="openDiaryCalendar()">📅 ${today}</div>
+                </div>
+                <div class="form-group">
+                    <textarea id="diary-content" rows="15" placeholder="写下今日日常，私密随心..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="saveDiary()">保存日记</button>
+                    <button class="btn-secondary" onclick="openEncryptionModal()">🔒 加密</button>
+                    <button class="btn-secondary" onclick="openDiaryCalendar()">🔍 搜索往日</button>
+                </div>
+                <p style="margin-top: 1.5rem; font-style: italic; color: #888;">“记录生活碎片，留存专属时光”</p>
+            </section>
+
+            <!-- 个人中心 -->
+            <section id="profile" class="page">
+                <h2>个人中心</h2>
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="username-input" value="记录者">
+                    <button class="btn-primary" style="margin-top: 0.5rem;" onclick="updateUsername()">修改昵称</button>
+                </div>
+                <div class="form-group">
+                    <label>主题切换</label>
+                    <div style="display: flex; gap: 10px; margin-top: 0.5rem;">
+                        <div class="mood-item" onclick="setTheme('light')">🤍 简约白</div>
+                        <div class="mood-item" onclick="setTheme('pink')">🌸 治愈粉</div>
+                        <div class="mood-item" onclick="setTheme('yellow')">💛 温暖黄</div>
+                        <div class="mood-item" onclick="setTheme('dark')">🌙 护眼黑</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>设置登录密码</label>
+                    <input type="password" id="profile-password" placeholder="留空则不设密码">
+                    <button class="btn-primary" style="margin-top: 0.5rem;" onclick="updatePassword()">保存密码</button>
+                </div>
+                <div class="quick-btn" style="text-align: left; margin-bottom: 1rem;">☁️ 数据备份</div>
+                <div class="quick-btn" style="text-align: left; margin-bottom: 1rem;">🛡️ 隐私保护</div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 模态框组 -->
+    <div id="calendar-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('calendar-modal')">&times;</span>
+            <div class="calendar-header">
+                <button onclick="changeMonth(-1)">◀</button>
+                <h3 id="calendar-title">2026年3月</h3>
+                <button onclick="changeMonth(1)">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="auth-title">请输入密码</h3>
+            <div class="form-group" style="margin-top: 1rem;">
+                <input type="password" id="auth-input" placeholder="密码">
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" id="auth-confirm-btn">确认</button>
+                <button class="btn-secondary" onclick="closeModal('auth-modal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 闹钟提醒模态框 -->
+    <div id="alarm-modal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <div class="alarm-clock">⏰</div>
+            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">时间到了！</h3>
+            <p style="margin-bottom: 1.5rem;">休息一下，或者继续开始下一段学习吧✨</p>
+            <button class="btn-primary" onclick="closeAlarm()">我知道了</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>©日常记录管家 | 隐私保护 | 意见反馈</p>
+        <p>记录生活，感受每一刻</p>
+    </footer>
+
+    <div id="toast">记录已保存</div>
+
+    <script>
+        // --- 核心状态与初始化 ---
+        let state = {
+            expenses: JSON.parse(localStorage.getItem('jilu_expenses') || '[]'),
+            moods: JSON.parse(localStorage.getItem('jilu_moods') || '[]'),
+            studies: JSON.parse(localStorage.getItem('jilu_studies') || '[]'),
+            diaries: JSON.parse(localStorage.getItem('jilu_diaries') || '{}'),
+            diaryPasswords: JSON.parse(localStorage.getItem('jilu_diary_pwds') || '{}'),
+            username: localStorage.getItem('jilu_username') || '记录者',
+            theme: localStorage.getItem('jilu_theme') || 'light',
+            password: localStorage.getItem('jilu_password') || ''
+        };
+
+        const today = new Date().toISOString().split('T')[0];
+        let currentCalendarDate = new Date();
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isCountdown = false;
+        let countdownInitialValue = 0;
+        let activeDiaryDate = today;
+
+        function init() {
+            applyTheme(state.theme);
+            document.getElementById('welcome-msg').innerText = `你好，${state.username}，记录今日美好吧✨`;
+            document.getElementById('username-input').value = state.username;
+            document.getElementById('profile-password').value = state.password;
+            
+            if (state.password) {
+                showAuthModal('输入管理密码以进入', (pwd) => {
+                    if (pwd === state.password) {
+                        closeModal('auth-modal');
+                    } else {
+                        alert('密码错误');
+                        location.reload();
+                    }
+                });
+            }
+
+            setupEventListeners();
+            updateHomeOverview();
+            renderExpenseList();
+            renderStudyList();
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const toggle = document.getElementById('theme-toggle');
+            if (theme === 'dark') toggle.innerText = '☀️';
+            else toggle.innerText = '🌙';
+        }
+
+        function setTheme(theme) {
+            state.theme = theme;
+            localStorage.setItem('jilu_theme', theme);
+            applyTheme(theme);
+            showToast('主题切换成功');
+        }
+
+        function updatePassword() {
+            const pwd = document.getElementById('profile-password').value;
+            state.password = pwd;
+            localStorage.setItem('jilu_password', pwd);
+            showToast('管理密码已设置');
+        }
+
+        function setupEventListeners() {
+            // 导航切换
+            document.querySelectorAll('#nav-links li').forEach(li => {
+                li.addEventListener('click', () => {
+                    showPage(li.dataset.page);
+                });
+            });
+
+            // 心情选择
+            document.querySelectorAll('.mood-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.mood-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    state.selectedMood = item.dataset.mood;
+                });
+            });
+
+            // 心情分值显示
+            document.getElementById('mood-score').addEventListener('input', (e) => {
+                document.getElementById('score-display').innerText = e.target.value;
+            });
+
+            // 夜间模式切换
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        }
+
+        // --- 功能函数 ---
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('#nav-links li').forEach(li => li.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            const navItem = document.querySelector(`#nav-links li[data-page="${pageId}"]`);
+            if(navItem) navItem.classList.add('active');
+
+            if(pageId === 'home') updateHomeOverview();
+            if(pageId === 'diary') {
+                activeDiaryDate = today;
+                loadDiary();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showAuthModal(title, onConfirm) {
+            document.getElementById('auth-modal').style.display = 'flex';
+            document.getElementById('auth-title').innerText = title;
+            document.getElementById('auth-input').value = '';
+            document.getElementById('auth-confirm-btn').onclick = () => onConfirm(document.getElementById('auth-input').value);
+        }
+
+        // --- 日历通用逻辑 ---
+        let calendarMode = 'mood'; // 'mood' or 'diary'
+
+        function openMoodCalendar() {
+            calendarMode = 'mood';
+            currentCalendarDate = new Date();
+            renderCalendar();
+            document.getElementById('calendar-modal').style.display = 'flex';
+        }
+
+        function openDiaryCalendar() {
+            calendarMode = 'diary';
+            currentCalendarDate = new Date();
+            renderCalendar();
+            document.getElementById('calendar-modal').style.display = 'flex';
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const grid = document.getElementById('calendar-grid');
+            const title = document.getElementById('calendar-title');
+            
+            title.innerText = `${year}年${month + 1}月`;
+            grid.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            // 填充空白
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += '<div class="calendar-day other-month"></div>';
+            }
+
+            for (let d = 1; d <= lastDate; d++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                let content = `<span>${d}</span>`;
+                let className = 'calendar-day';
+
+                if (calendarMode === 'mood') {
+                    const moodRecord = state.moods.find(m => m.date === dateStr);
+                    if (moodRecord) {
+                        const icons = { '开心': '😊', '平静': '😐', '低落': '😔', '疲惫': '😫' };
+                        content += `<span class="mood-icon">${icons[moodRecord.mood] || ''}</span>`;
+                        className += ' has-record';
+                    }
+                } else {
+                    if (state.diaries[dateStr]) className += ' has-record';
+                }
+
+                const dayEl = document.createElement('div');
+                dayEl.className = className;
+                dayEl.innerHTML = content;
+                dayEl.onclick = () => handleCalendarClick(dateStr);
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function handleCalendarClick(dateStr) {
+            if (calendarMode === 'diary') {
+                activeDiaryDate = dateStr;
+                loadDiary();
+                closeModal('calendar-modal');
+            } else {
+                const moodRecord = state.moods.find(m => m.date === dateStr);
+                if (moodRecord) {
+                    alert(`日期: ${dateStr}\n心情: ${moodRecord.mood}\n打分: ${moodRecord.score}\n随笔: ${moodRecord.note}`);
+                }
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
+        function toggleTheme() {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', state.theme);
+            document.getElementById('theme-toggle').innerText = state.theme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('jilu_theme', state.theme);
+            showToast(state.theme === 'dark' ? '切换成功，护眼记录' : '已切换为日间模式');
+        }
+
+        function updateUsername() {
+            const newName = document.getElementById('username-input').value.trim();
+            if(newName) {
+                state.username = newName;
+                localStorage.setItem('jilu_username', newName);
+                document.getElementById('welcome-msg').innerText = `你好，${state.username}，记录今日美好吧✨`;
+                showToast('昵称已更新');
+            }
+        }
+
+        // --- 开销逻辑 ---
+        function saveExpense() {
+            const amount = parseFloat(document.getElementById('exp-amount').value);
+            const type = document.getElementById('exp-type').value;
+            const note = document.getElementById('exp-note').value;
+
+            if(!amount) return showToast('请输入有效金额');
+
+            const item = { id: Date.now(), date: today, amount, type, note };
+            state.expenses.push(item);
+            localStorage.setItem('jilu_expenses', JSON.stringify(state.expenses));
+            
+            renderExpenseList();
+            updateHomeOverview();
+            clearForm('expense');
+            showToast('记录已保存');
+        }
+
+        function renderExpenseList() {
+            const list = document.getElementById('expense-list');
+            const monthlySummary = document.getElementById('monthly-summary');
+            
+            const currentMonth = today.substring(0, 7);
+            const monthlyExpenses = state.expenses.filter(e => e.date.startsWith(currentMonth));
+            const total = monthlyExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const budget = 2000;
+            
+            monthlySummary.innerText = `本月支出¥${total.toFixed(2)}，预算剩余¥${(budget - total).toFixed(2)}`;
+
+            if(state.expenses.length === 0) {
+                list.innerHTML = '<div class="empty-tip">无收支记录，快来记第一笔吧</div>';
+                return;
+            }
+
+            list.innerHTML = state.expenses.slice().reverse().map(e => `
+                <div class="list-item">
+                    <div>
+                        <strong>${e.type}</strong> <small>${e.date}</small>
+                        <div style="font-size: 0.8rem; color: #888;">${e.note}</div>
+                    </div>
+                    <div style="color: #ff5252; font-weight: bold;">-¥${e.amount.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+
+        // --- 心情逻辑 ---
+        function saveMood() {
+            if (state.moods.some(m => m.date === today)) return showToast('今日已打卡，明天再来吧');
+            if(!state.selectedMood) return showToast('请选择一个心情');
+            const score = document.getElementById('mood-score').value;
+            const note = document.getElementById('mood-note').value;
+
+            const entry = { date: today, mood: state.selectedMood, score, note };
+            state.moods.push(entry);
+            localStorage.setItem('jilu_moods', JSON.stringify(state.moods));
+            
+            showToast('今日心情已打卡');
+            updateHomeOverview();
+        }
+
+        // --- 学习逻辑 ---
+        function toggleTimer() {
+            const btn = document.getElementById('timer-btn');
+            const countdownInput = document.getElementById('countdown-input');
+            
+            if (timerInterval) {
+                // 停止计时
+                clearInterval(timerInterval);
+                timerInterval = null;
+                btn.innerText = '开始计时';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+                countdownInput.disabled = false;
+                
+                let recordedMinutes = 0;
+                if (isCountdown) {
+                    // 如果是倒计时模式，记录已经消耗的时间
+                    recordedMinutes = Math.floor((countdownInitialValue - timerSeconds) / 60);
+                } else {
+                    recordedMinutes = Math.floor(timerSeconds / 60);
+                }
+
+                if (recordedMinutes > 0) {
+                    const task = prompt('为这段学习时间命名：') || '学习记录';
+                    const item = { id: Date.now(), date: today, task, duration: recordedMinutes, done: true };
+                    state.studies.push(item);
+                    localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+                    renderStudyList();
+                    updateHomeOverview();
+                }
+                timerSeconds = 0;
+                updateTimerDisplay();
+                isCountdown = false;
+            } else {
+                // 开始计时前检查是否有倒计时设置
+                const countdownVal = parseInt(countdownInput.value);
+                if (!isNaN(countdownVal) && countdownVal > 0) {
+                    isCountdown = true;
+                    countdownInitialValue = countdownVal * 60;
+                    timerSeconds = countdownInitialValue;
+                    countdownInput.disabled = true;
+                } else {
+                    isCountdown = false;
+                    timerSeconds = 0;
+                }
+
+                timerInterval = setInterval(() => {
+                    if (isCountdown) {
+                        timerSeconds--;
+                        if (timerSeconds <= 0) {
+                            triggerAlarm();
+                        }
+                    } else {
+                        timerSeconds++;
+                    }
+                    updateTimerDisplay();
+                }, 1000);
+                
+                btn.innerText = '停止计时';
+                btn.classList.add('btn-primary');
+                btn.classList.remove('btn-secondary');
+            }
+        }
+
+        function triggerAlarm() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            const btn = document.getElementById('timer-btn');
+            btn.innerText = '开始计时';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+            document.getElementById('countdown-input').disabled = false;
+            
+            // 弹出闹钟模态框
+            document.getElementById('alarm-modal').style.display = 'flex';
+            
+            // 记录倒计时完成的学习时间
+            const task = '倒计时学习';
+            const item = { id: Date.now(), date: today, task, duration: Math.floor(countdownInitialValue / 60), done: true };
+            state.studies.push(item);
+            localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+            renderStudyList();
+            updateHomeOverview();
+            
+            timerSeconds = 0;
+            updateTimerDisplay();
+            isCountdown = false;
+        }
+
+        function closeAlarm() {
+            document.getElementById('alarm-modal').style.display = 'none';
+        }
+
+        function updateTimerDisplay() {
+            const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+            const s = String(timerSeconds % 60).padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${h}:${m}:${s}`;
+        }
+
+        function addStudyTask() {
+            const task = document.getElementById('study-task').value.trim();
+            const duration = parseInt(document.getElementById('study-duration').value);
+
+            if(!task || !duration) return showToast('请填写任务和时长');
+
+            const item = { id: Date.now(), date: today, task, duration, done: false };
+            state.studies.push(item);
+            localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+            
+            renderStudyList();
+            updateHomeOverview();
+            clearForm('study');
+            showToast('任务已添加');
+        }
+
+        function toggleStudy(id) {
+            const task = state.studies.find(s => s.id === id);
+            if(task) {
+                task.done = !task.done;
+                localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+                renderStudyList();
+            }
+        }
+
+        function renderStudyList() {
+            const list = document.getElementById('study-list');
+            const summary = document.getElementById('study-summary');
+            
+            const totalMinutes = state.studies.reduce((sum, s) => sum + s.duration, 0);
+            const completed = state.studies.filter(s => s.done).length;
+            const rate = state.studies.length ? Math.round((completed / state.studies.length) * 100) : 0;
+
+            summary.innerText = `累计学习 ${(totalMinutes/60).toFixed(1)} 小时，完成率 ${rate}%`;
+
+            if(state.studies.length === 0) {
+                list.innerHTML = '<div class="empty-tip">暂无任务，开始学习吧</div>';
+                return;
+            }
+
+            list.innerHTML = state.studies.slice().reverse().map(s => `
+                <div class="list-item">
+                    <div style="text-decoration: ${s.done ? 'line-through' : 'none'}; opacity: ${s.done ? 0.5 : 1}">
+                        <strong>${s.task}</strong> - ${s.duration}分钟
+                    </div>
+                    <button class="${s.done ? 'btn-secondary' : 'btn-primary'}" onclick="toggleStudy(${s.id})">
+                        ${s.done ? '已完成' : '标记完成'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // --- 日记逻辑 ---
+        function openEncryptionModal() {
+            showAuthModal('设置此篇日记的访问密码', (pwd) => {
+                if (pwd) {
+                    state.diaryPasswords[activeDiaryDate] = pwd;
+                    localStorage.setItem('jilu_diary_pwds', JSON.stringify(state.diaryPasswords));
+                    showToast('已为本篇日记设置密码');
+                }
+                closeModal('auth-modal');
+            });
+        }
+
+        function saveDiary() {
+            const content = document.getElementById('diary-content').value.trim();
+            if(!content) return showToast('日记内容不能为空');
+            
+            state.diaries[activeDiaryDate] = content;
+            localStorage.setItem('jilu_diaries', JSON.stringify(state.diaries));
+            showToast('日记已保存');
+            updateHomeOverview();
+        }
+
+        function loadDiary() {
+            document.getElementById('diary-date-display').innerText = `📅 ${activeDiaryDate}`;
+            const pwd = state.diaryPasswords[activeDiaryDate];
+            const content = state.diaries[activeDiaryDate] || '';
+
+            if (pwd) {
+                document.getElementById('diary-content').value = '*** 日记已加密 ***';
+                showAuthModal('此篇日记已加密，请输入密码', (inputPwd) => {
+                    if (inputPwd === pwd) {
+                        document.getElementById('diary-content').value = content;
+                        closeModal('auth-modal');
+                    } else {
+                        alert('密码错误');
+                    }
+                });
+            } else {
+                document.getElementById('diary-content').value = content;
+            }
+        }
+
+        // --- 首页概览逻辑 ---
+        function updateHomeOverview() {
+            const dayExp = state.expenses.filter(e => e.date === today).reduce((sum, e) => sum + e.amount, 0);
+            const dayMood = state.moods.find(m => m.date === today);
+            const dayStudy = state.studies.filter(s => s.date === today).reduce((sum, s) => sum + s.duration, 0);
+            const hasDiary = state.diaries[today];
+
+            document.getElementById('today-expense').innerText = `¥${dayExp.toFixed(2)}`;
+            document.getElementById('today-mood').innerText = dayMood ? `${dayMood.mood} (${dayMood.score}分)` : '未记录';
+            document.getElementById('today-study').innerText = `${dayStudy} 分钟`;
+            document.getElementById('today-diary').innerText = hasDiary ? '已撰写' : '待撰写';
+
+            const isAnyDone = dayExp > 0 || dayMood || dayStudy > 0 || hasDiary;
+            document.getElementById('home-empty').style.display = isAnyDone ? 'none' : 'block';
+
+            // 心情限制
+            const moodBtn = document.getElementById('save-mood-btn');
+            const moodSelector = document.getElementById('mood-selector');
+            if (dayMood) {
+                moodBtn.classList.add('disabled');
+                moodBtn.innerText = '今日已打卡';
+                moodSelector.classList.add('disabled');
+            } else {
+                moodBtn.classList.remove('disabled');
+                moodBtn.innerText = '今日打卡';
+                moodSelector.classList.remove('disabled');
+            }
+        }
+
+        function clearForm(type) {
+            if(type === 'expense') {
+                document.getElementById('exp-amount').value = '';
+                document.getElementById('exp-note').value = '';
+            } else if(type === 'study') {
+                document.getElementById('study-task').value = '';
+                document.getElementById('study-duration').value = '';
+            }
+        }
+
+        // 启动
+        init();
+    </script>
+</body>
+</html>
