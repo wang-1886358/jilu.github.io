@@ -9,6 +9,8 @@
             --bg-beige: #fdfbf7;
             --bg-blue: #e3f2fd;
             --primary-blue: #42a5f5;
+            --primary-purple: #7e57c2;
+            --bg-purple: #f3e5f5;
             --text-color: #5d5d5d;
             --card-bg: #ffffff;
             --accent-color: #90caf9;
@@ -57,6 +59,145 @@
             display: flex;
             flex-direction: column;
             transition: var(--transition);
+        }
+
+        /* 登录界面样式 */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #7e57c2, #9575cd, #5e35b1, #7e57c2);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: var(--transition);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 卡通角色动画 */
+        .avatar-box {
+            width: 120px;
+            height: 120px;
+            background: #eee;
+            border-radius: 50%;
+            margin: -80px auto 20px;
+            border: 5px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            background-color: #fff9c4;
+            overflow: hidden;
+            animation: bobbing 3s ease-in-out infinite;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .avatar-face {
+            transition: all 0.2s ease;
+        }
+
+        .login-title {
+            color: var(--primary-purple);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-purple);
+        }
+
+        .login-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-purple {
+            background: var(--primary-purple);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-purple:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-guest {
+            background: transparent;
+            color: #888;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        /* 动画关键帧 */
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .avatar-eye {
+            animation: blink 4s infinite;
+        }
+
+        /* 主界面调整 */
+        body.logged-out {
+            overflow: hidden;
         }
 
         /* 顶部导航 */
@@ -357,30 +498,171 @@
             100% { transform: rotate(0deg); }
         }
         
+        /* 日记本复古纸张样式 */
+        .diary-paper-container {
+            position: relative;
+            padding: 40px 20px 20px;
+            background: #fdfbf7;
+            box-shadow: 
+                2px 2px 0 #fff,
+                4px 4px 0 #ddd,
+                5px 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            min-height: 400px;
+            margin-top: 30px;
+        }
+
+        .diary-paper-container::before {
+            content: "";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            background: #333;
+            border-radius: 4px;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .diary-paper-container::after {
+            content: "📎";
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            z-index: 11;
+            color: #ccc;
+        }
+
+        .diary-torn-edge {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: white;
+            background-image: radial-gradient(circle at 10px -5px, transparent 12px, white 13px);
+            background-size: 20px 20px;
+        }
+
+        #diary-content {
+            background: transparent;
+            border: none;
+            line-height: 1.8;
+            background-image: linear-gradient(#e1e1e1 1px, transparent 1px);
+            background-size: 100% 1.8em;
+            padding-top: 0.5em;
+            resize: none;
+            outline: none;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        #diary-content:focus {
+            border: none;
+        }
+
         /* 禁用样式 */
         .disabled {
             opacity: 0.5;
             pointer-events: none;
             cursor: not-allowed;
         }
+
+        /* 像素风装饰贴纸样式 */
+        .sticker {
+            position: absolute;
+            font-size: 2rem;
+            user-select: none;
+            pointer-events: none;
+            z-index: 5;
+            filter: drop-shadow(2px 2px 0px white) drop-shadow(-2px -2px 0px white) drop-shadow(2px -2px 0px white) drop-shadow(-2px 2px 0px white);
+            animation: float-sticker 4s ease-in-out infinite;
+        }
+
+        @keyframes float-sticker {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .sticker-pink { color: #ff69b4; }
+        .sticker-pixel { font-family: "Courier New", Courier, monospace; font-weight: bold; }
+
+        /* 特定位置的贴纸 */
+        .s1 { top: 10%; left: 5%; font-size: 3rem; animation-delay: 0s; }
+        .s2 { bottom: 15%; right: 5%; font-size: 2.5rem; animation-delay: 1s; }
+        .s3 { top: 20%; right: 10%; font-size: 2rem; animation-delay: 2s; }
+        .s4 { bottom: 10%; left: 8%; font-size: 2.2rem; animation-delay: 1.5s; }
+        .s5 { top: 50%; left: 2%; font-size: 1.8rem; animation-delay: 0.5s; }
+
+        .sticker:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(4px 4px 0px white) drop-shadow(-4px -4px 0px white);
+            transition: 0.2s;
+        }
+
+        /* 装饰卡片 */
+        .decoration-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .decoration-card::after {
+            content: "✨";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            opacity: 0.3;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
-<body>
+<body class="logged-out">
+
+    <!-- 登录界面 -->
+    <div id="login-screen">
+        <div class="login-container">
+            <div class="avatar-box" id="avatar-box">
+                <div class="avatar-face" id="avatar-face">😊</div>
+            </div>
+            <div class="login-title">欢迎回来 ✨</div>
+            <div class="input-group">
+                <input type="email" id="login-email" placeholder="邮箱" onfocus="changeFace('focus')" onblur="changeFace('normal')">
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-pwd" placeholder="密码" onfocus="changeFace('shy')" onblur="changeFace('normal')">
+            </div>
+            <div class="login-btns">
+                <button class="btn-purple" onclick="handleLogin()">立即登录</button>
+                <button class="btn-guest" onclick="enterAsGuest()">先随便看看 (游客使用)</button>
+            </div>
+        </div>
+    </div>
 
     <header>
         <div class="logo">✨ 日常记录管家</div>
         <nav>
             <ul id="nav-links">
-                <li data-page="home" class="active">首页概览</li>
-                <li data-page="expense">开销记录</li>
-                <li data-page="mood">心情打卡</li>
-                <li data-page="study">学习记录</li>
-                <li data-page="diary">写日记</li>
-                <li data-page="profile">个人中心</li>
+                <li data-page="home" class="active">🏠 首页概览</li>
+                <li data-page="expense">💰 开销记录</li>
+                <li data-page="mood">😊 心情打卡</li>
+                <li data-page="study">📚 学习记录</li>
+                <li data-page="diary">✍️ 写日记</li>
+                <li data-page="profile">⚙️ 个人中心</li>
             </ul>
         </nav>
         <div class="theme-toggle" id="theme-toggle" title="切换夜间模式">🌙</div>
     </header>
+
+    <!-- 背景装饰贴纸 -->
+    <div class="sticker s1">🐰</div>
+    <div class="sticker s2">🍰</div>
+    <div class="sticker s3">⭐</div>
+    <div class="sticker s4">🐱</div>
+    <div class="sticker s5">🎀</div>
 
     <div class="container">
         <aside>
@@ -395,24 +677,27 @@
             <section id="home" class="page active">
                 <h2 id="welcome-msg">你好，记录者，记录今日美好吧✨</h2>
                 <div class="card-grid">
-                    <div class="stat-card">
-                        <h3>今日支出</h3>
+                    <div class="stat-card decoration-card">
+                        <h3>今日支出 💸</h3>
                         <p id="today-expense">¥0.00</p>
                     </div>
-                    <div class="stat-card">
-                        <h3>今日心情</h3>
+                    <div class="stat-card decoration-card">
+                        <h3>今日心情 🌈</h3>
                         <p id="today-mood">未记录</p>
                     </div>
-                    <div class="stat-card">
-                        <h3>学习时长</h3>
+                    <div class="stat-card decoration-card">
+                        <h3>学习时长 ⏳</h3>
                         <p id="today-study">0 分钟</p>
                     </div>
-                    <div class="stat-card">
-                        <h3>日记状态</h3>
+                    <div class="stat-card decoration-card">
+                        <h3>日记状态 📖</h3>
                         <p id="today-diary">待撰写</p>
                     </div>
                 </div>
-                <div id="home-empty" class="empty-tip">暂无今日记录，点击按钮快速开启</div>
+                <div id="home-empty" class="empty-tip">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍃</div>
+                    暂无今日记录，点击按钮快速开启
+                </div>
             </section>
 
             <!-- 开销记录 -->
@@ -506,10 +791,15 @@
                     <h2>写日记</h2>
                     <div id="diary-date-display" style="font-weight: bold; color: var(--primary-blue); cursor: pointer;" onclick="openDiaryCalendar()">📅 ${today}</div>
                 </div>
-                <div class="form-group">
-                    <textarea id="diary-content" rows="15" placeholder="写下今日日常，私密随心..."></textarea>
+                
+                <div class="diary-paper-container">
+                    <div class="form-group">
+                        <textarea id="diary-content" rows="15" placeholder="写下今日日常，私密随心..."></textarea>
+                    </div>
+                    <div class="diary-torn-edge"></div>
                 </div>
-                <div class="btn-group">
+
+                <div class="btn-group" style="margin-top: 2rem;">
                     <button class="btn-primary" onclick="saveDiary()">保存日记</button>
                     <button class="btn-secondary" onclick="openEncryptionModal()">🔒 加密</button>
                     <button class="btn-secondary" onclick="openDiaryCalendar()">🔍 搜索往日</button>
@@ -539,8 +829,14 @@
                     <input type="password" id="profile-password" placeholder="留空则不设密码">
                     <button class="btn-primary" style="margin-top: 0.5rem;" onclick="updatePassword()">保存密码</button>
                 </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                    <div class="quick-btn" style="flex: 1; text-align: left;" onclick="exportBackup()">📥 备份导出</div>
+                    <div class="quick-btn" style="flex: 1; text-align: left;" onclick="document.getElementById('import-file').click()">📤 数据导入</div>
+                </div>
+                <input type="file" id="import-file" style="display: none;" accept=".json" onchange="importBackup(event)">
                 <div class="quick-btn" style="text-align: left; margin-bottom: 1rem;">☁️ 数据备份</div>
                 <div class="quick-btn" style="text-align: left; margin-bottom: 1rem;">🛡️ 隐私保护</div>
+                <button class="btn-purple" style="width: 100%; margin-top: 2rem;" onclick="handleLogout()">退出登录</button>
             </section>
         </main>
     </div>
@@ -591,14 +887,19 @@
     <script>
         // --- 核心状态与初始化 ---
         let state = {
-            expenses: JSON.parse(localStorage.getItem('jilu_expenses') || '[]'),
-            moods: JSON.parse(localStorage.getItem('jilu_moods') || '[]'),
-            studies: JSON.parse(localStorage.getItem('jilu_studies') || '[]'),
-            diaries: JSON.parse(localStorage.getItem('jilu_diaries') || '{}'),
-            diaryPasswords: JSON.parse(localStorage.getItem('jilu_diary_pwds') || '{}'),
-            username: localStorage.getItem('jilu_username') || '记录者',
-            theme: localStorage.getItem('jilu_theme') || 'light',
-            password: localStorage.getItem('jilu_password') || ''
+            users: JSON.parse(localStorage.getItem('jilu_users') || '{}'), // {email: password}
+            currentUser: localStorage.getItem('jilu_currentUser') || '',
+            isLoggedIn: localStorage.getItem('jilu_isLoggedIn') === 'true',
+            
+            // 以下数据将根据 currentUser 动态加载
+            expenses: [],
+            moods: [],
+            studies: [],
+            diaries: {},
+            diaryPasswords: {},
+            username: '记录者',
+            theme: 'light',
+            password: '' // 独立于登录密码的二级管理密码
         };
 
         const today = new Date().toISOString().split('T')[0];
@@ -610,26 +911,190 @@
         let activeDiaryDate = today;
 
         function init() {
+            if (state.isLoggedIn && state.currentUser) {
+                loadUserData(state.currentUser);
+                document.body.classList.remove('logged-out');
+                document.getElementById('login-screen').style.display = 'none';
+            } else {
+                state.isLoggedIn = false;
+                localStorage.setItem('jilu_isLoggedIn', 'false');
+            }
+
             applyTheme(state.theme);
             document.getElementById('welcome-msg').innerText = `你好，${state.username}，记录今日美好吧✨`;
             document.getElementById('username-input').value = state.username;
             document.getElementById('profile-password').value = state.password;
             
-            if (state.password) {
-                showAuthModal('输入管理密码以进入', (pwd) => {
-                    if (pwd === state.password) {
-                        closeModal('auth-modal');
-                    } else {
-                        alert('密码错误');
-                        location.reload();
-                    }
-                });
-            }
-
             setupEventListeners();
             updateHomeOverview();
             renderExpenseList();
             renderStudyList();
+        }
+
+        // 加载特定用户的数据
+        function loadUserData(email) {
+            const prefix = `jilu_data_${email}_`;
+            state.expenses = JSON.parse(localStorage.getItem(prefix + 'expenses') || '[]');
+            state.moods = JSON.parse(localStorage.getItem(prefix + 'moods') || '[]');
+            state.studies = JSON.parse(localStorage.getItem(prefix + 'studies') || '[]');
+            state.diaries = JSON.parse(localStorage.getItem(prefix + 'diaries') || '{}');
+            state.diaryPasswords = JSON.parse(localStorage.getItem(prefix + 'diary_pwds') || '{}');
+            state.username = localStorage.getItem(prefix + 'username') || (email === 'guest' ? '游客' : email.split('@')[0]);
+            state.theme = localStorage.getItem(prefix + 'theme') || 'light';
+            state.password = localStorage.getItem(prefix + 'password') || '';
+        }
+
+        // --- 登录逻辑 ---
+        function changeFace(status) {
+            const face = document.getElementById('avatar-face');
+            const icons = {
+                'normal': '😊',
+                'focus': '🤩',
+                'shy': '🙈',
+                'error': '😵',
+                'success': '🥳'
+            };
+            face.innerText = icons[status] || '😊';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const pwd = document.getElementById('login-pwd').value.trim();
+
+            if (!email || !pwd) {
+                changeFace('error');
+                showToast('请输入账号和密码');
+                return;
+            }
+
+            // 检查用户是否存在
+            if (state.users[email]) {
+                // 验证密码
+                if (state.users[email] === pwd) {
+                    performLogin(email);
+                } else {
+                    changeFace('error');
+                    alert('密码错误，请重新输入');
+                    document.getElementById('login-pwd').value = '';
+                }
+            } else {
+                // 自动注册新用户
+                if (confirm(`账号 ${email} 不存在，是否以此密码创建新账号？`)) {
+                    state.users[email] = pwd;
+                    localStorage.setItem('jilu_users', JSON.stringify(state.users));
+                    performLogin(email);
+                } else {
+                    document.getElementById('login-email').value = '';
+                    document.getElementById('login-pwd').value = '';
+                }
+            }
+        }
+
+        function performLogin(email) {
+            changeFace('success');
+            setTimeout(() => {
+                state.currentUser = email;
+                state.isLoggedIn = true;
+                localStorage.setItem('jilu_currentUser', email);
+                localStorage.setItem('jilu_isLoggedIn', 'true');
+                
+                loadUserData(email);
+                saveState(); // 确保初始数据结构存在
+
+                document.body.classList.remove('logged-out');
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('welcome-msg').innerText = `你好，${state.username}，记录今日美好吧✨`;
+                    document.getElementById('username-input').value = state.username;
+                    applyTheme(state.theme);
+                    updateHomeOverview();
+                    renderExpenseList();
+                    renderStudyList();
+                    showToast('欢迎回来！');
+                }, 300);
+            }, 500);
+        }
+
+        function enterAsGuest() {
+            performLogin('guest');
+        }
+
+        function handleLogout() {
+            if (confirm('确定退出登录吗？数据已自动保存。')) {
+                state.isLoggedIn = false;
+                state.currentUser = '';
+                localStorage.setItem('jilu_isLoggedIn', 'false');
+                localStorage.setItem('jilu_currentUser', '');
+                location.reload();
+            }
+        }
+
+        // --- 备份导出/导入逻辑 ---
+        function exportBackup() {
+            const data = {
+                expenses: state.expenses,
+                moods: state.moods,
+                studies: state.studies,
+                diaries: state.diaries,
+                diaryPasswords: state.diaryPasswords,
+                username: state.username,
+                theme: state.theme,
+                password: state.password,
+                currentUser: state.currentUser
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `jilu_backup_${state.currentUser}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('备份已导出');
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (confirm('导入备份将覆盖当前账号所有数据，确定继续吗？')) {
+                        state.expenses = data.expenses || [];
+                        state.moods = data.moods || [];
+                        state.studies = data.studies || [];
+                        state.diaries = data.diaries || {};
+                        state.diaryPasswords = data.diaryPasswords || {};
+                        state.username = data.username || state.currentUser;
+                        state.theme = data.theme || 'light';
+                        state.password = data.password || '';
+                        
+                        saveState();
+                        alert('数据导入成功！页面即将刷新以应用更改。');
+                        location.reload();
+                    }
+                } catch (err) {
+                    alert('导入失败：文件格式不正确');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- 自动保存包装器 ---
+        function saveState() {
+            if (!state.currentUser) return;
+            const prefix = `jilu_data_${state.currentUser}_`;
+            localStorage.setItem(prefix + 'expenses', JSON.stringify(state.expenses));
+            localStorage.setItem(prefix + 'moods', JSON.stringify(state.moods));
+            localStorage.setItem(prefix + 'studies', JSON.stringify(state.studies));
+            localStorage.setItem(prefix + 'diaries', JSON.stringify(state.diaries));
+            localStorage.setItem(prefix + 'diary_pwds', JSON.stringify(state.diaryPasswords));
+            localStorage.setItem(prefix + 'username', state.username);
+            localStorage.setItem(prefix + 'theme', state.theme);
+            localStorage.setItem(prefix + 'password', state.password);
         }
 
         function applyTheme(theme) {
@@ -641,7 +1106,7 @@
 
         function setTheme(theme) {
             state.theme = theme;
-            localStorage.setItem('jilu_theme', theme);
+            saveState();
             applyTheme(theme);
             showToast('主题切换成功');
         }
@@ -649,7 +1114,7 @@
         function updatePassword() {
             const pwd = document.getElementById('profile-password').value;
             state.password = pwd;
-            localStorage.setItem('jilu_password', pwd);
+            saveState();
             showToast('管理密码已设置');
         }
 
@@ -794,7 +1259,7 @@
             state.theme = state.theme === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', state.theme);
             document.getElementById('theme-toggle').innerText = state.theme === 'light' ? '🌙' : '☀️';
-            localStorage.setItem('jilu_theme', state.theme);
+            saveState();
             showToast(state.theme === 'dark' ? '切换成功，护眼记录' : '已切换为日间模式');
         }
 
@@ -802,8 +1267,9 @@
             const newName = document.getElementById('username-input').value.trim();
             if(newName) {
                 state.username = newName;
-                localStorage.setItem('jilu_username', newName);
+                saveState();
                 document.getElementById('welcome-msg').innerText = `你好，${state.username}，记录今日美好吧✨`;
+                document.getElementById('username-input').value = state.username;
                 showToast('昵称已更新');
             }
         }
@@ -818,7 +1284,7 @@
 
             const item = { id: Date.now(), date: today, amount, type, note };
             state.expenses.push(item);
-            localStorage.setItem('jilu_expenses', JSON.stringify(state.expenses));
+            saveState();
             
             renderExpenseList();
             updateHomeOverview();
@@ -862,7 +1328,7 @@
 
             const entry = { date: today, mood: state.selectedMood, score, note };
             state.moods.push(entry);
-            localStorage.setItem('jilu_moods', JSON.stringify(state.moods));
+            saveState();
             
             showToast('今日心情已打卡');
             updateHomeOverview();
@@ -894,7 +1360,7 @@
                     const task = prompt('为这段学习时间命名：') || '学习记录';
                     const item = { id: Date.now(), date: today, task, duration: recordedMinutes, done: true };
                     state.studies.push(item);
-                    localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+                    saveState();
                     renderStudyList();
                     updateHomeOverview();
                 }
@@ -948,7 +1414,7 @@
             const task = '倒计时学习';
             const item = { id: Date.now(), date: today, task, duration: Math.floor(countdownInitialValue / 60), done: true };
             state.studies.push(item);
-            localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+            saveState();
             renderStudyList();
             updateHomeOverview();
             
@@ -976,7 +1442,7 @@
 
             const item = { id: Date.now(), date: today, task, duration, done: false };
             state.studies.push(item);
-            localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+            saveState();
             
             renderStudyList();
             updateHomeOverview();
@@ -988,7 +1454,7 @@
             const task = state.studies.find(s => s.id === id);
             if(task) {
                 task.done = !task.done;
-                localStorage.setItem('jilu_studies', JSON.stringify(state.studies));
+                saveState();
                 renderStudyList();
             }
         }
@@ -1025,7 +1491,7 @@
             showAuthModal('设置此篇日记的访问密码', (pwd) => {
                 if (pwd) {
                     state.diaryPasswords[activeDiaryDate] = pwd;
-                    localStorage.setItem('jilu_diary_pwds', JSON.stringify(state.diaryPasswords));
+                    saveState();
                     showToast('已为本篇日记设置密码');
                 }
                 closeModal('auth-modal');
@@ -1037,7 +1503,7 @@
             if(!content) return showToast('日记内容不能为空');
             
             state.diaries[activeDiaryDate] = content;
-            localStorage.setItem('jilu_diaries', JSON.stringify(state.diaries));
+            saveState();
             showToast('日记已保存');
             updateHomeOverview();
         }
